@@ -1,0 +1,7 @@
+build/Release
+build
+dist
+
+# Dependency directories
+node_modules/
+jspm_packages/
