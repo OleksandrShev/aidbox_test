@@ -1,7 +1,8 @@
 import express from 'express';
 import { fetchAidBoxToken, fetchStgFhirToken } from "./tokenFecher";
-import { getDifferenceBetweenEntities } from "./entityFetcher";
-
+import {getDifferenceBetweenEntities} from "./entityFetcher";
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
 const port = 3000;
 

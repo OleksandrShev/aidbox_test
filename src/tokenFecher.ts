@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {aidBox_client_id, aidBox_client_secret, fhir_client_id, fhir_client_secret, grant_type} from "./consts";
+import { grant_type} from "./consts";
 
 interface TokenResponse {
     access_token: string;
@@ -15,8 +15,8 @@ export async function fetchStgFhirToken(): Promise<TokenResponse> {
     };
     const data = {
         grant_type: grant_type,
-        client_id: fhir_client_id,
-        client_secret: fhir_client_secret
+        client_id: process.env.fhir_client_id,
+        client_secret: process.env.fhir_client_secret
     };
 
     try {
@@ -35,8 +35,8 @@ export async function fetchAidBoxToken(): Promise<TokenResponse> {
     };
     const data = {
         grant_type: grant_type,
-        client_id: aidBox_client_id,
-        client_secret: aidBox_client_secret
+        client_id: process.env.aidBox_client_id,
+        client_secret: process.env.aidBox_client_secret
     };
 
     try {

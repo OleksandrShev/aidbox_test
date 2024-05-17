@@ -3,6 +3,7 @@ import {fetchAidBoxToken, fetchStgFhirToken} from "./tokenFecher";
 import {diff} from "deep-object-diff";
 import {aidBoxBaseUrl, count, fhirProxyBaseUrl} from "./consts";
 
+
 // @ts-ignore
 export const getFhirProxyEntity = async (fhirProxyUrl:string, allFhirEntities: any): Promise<any[]> => {
     const fhirTokenResponse = await fetchStgFhirToken();
@@ -52,13 +53,16 @@ export const getDifferenceBetweenEntities = async (entity: string) => {
             id: aidBoxEntity.resource.id
         }
         if (searchedFhirEntity) {
-            const dif = diff(searchedFhirEntity, aidBoxEntity)
-            result = {
-                ... result,
-                desc: `the difference between the aidbox and the fhir ${entity}s`,
-                dif
+            const dif = diff(searchedFhirEntity, aidBoxEntity);
+            removeUnnecessaryDiff(dif);
+            if (Object.keys(dif).length != 0) {
+                result = {
+                    ... result,
+                    desc: `the difference between the aidbox and the fhir ${entity}s`,
+                    dif
+                }
+                diffResult.push(result)
             }
-            diffResult.push(result)
         } else {
             result = {
                 ...result,
@@ -70,3 +74,30 @@ export const getDifferenceBetweenEntities = async (entity: string) => {
     return {diffResult, notFoundResult}
 }
 
+export const removeUnnecessaryDiff = (dif: any) => {
+    if (dif?.fullUrl) {
+        delete dif?.fullUrl;
+    }
+    if (dif?.link) {
+        delete dif?.link;
+    }
+    if (dif?.resource?.meta) {
+        delete dif?.resource?.meta;
+    }
+    if (!(!!Object.keys(dif?.resource).length)) {
+        delete dif?.resource;
+    }
+    // for (let key in dif) {
+    //     if (dif[key] && typeof dif[key] === 'object') {
+    //         removeUnnecessaryDiff(dif[key], unnecessaryDiffList);
+    //
+    //         if (Object.keys(dif[key]).length === 0) {
+    //             delete dif[key];
+    //         }
+    //     } else {
+    //         if (unnecessaryDiffList.includes(key)) {
+    //             delete dif[key];
+    //         }
+    //     }
+    // }
+}
