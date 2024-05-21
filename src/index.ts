@@ -2,12 +2,11 @@ import express from 'express';
 import { fetchAidBoxToken, fetchStgFhirToken } from "./tokenFecher";
 import {getAidBoxEntity, getDifferenceBetweenEntities, getFhirProxyEntity} from "./entityFetcher";
 import dotenv from 'dotenv';
-import fs from 'fs';
 import {aidBoxBaseUrl, count, fhirProxyBaseUrl} from "./consts";
 dotenv.config();
 const app = express();
 const port = 3000;
-const fhirDir = './data/fhir';
+
 app.get('/', async (req, res) => {
     const data = {};
     res.send(`Data: ${JSON.stringify(data)}`);
@@ -69,16 +68,16 @@ app.get('/location', async (req, res) => {
     }
 });
 
-app.get('/encounter', async (req, res) => {
-    try {
-        const data = await getDifferenceBetweenEntities("Encounter");
-        console.log(data);
-        res.send(data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error fetching encounters');
-    }
-});
+// app.get('/encounter', async (req, res) => {
+//     try {
+//         const data = await getDifferenceBetweenEntities("Encounter");
+//         console.log(data);
+//         res.send(data);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Error fetching encounters');
+//     }
+// });
 
 app.get('/fhir-encounters', async (req, res) => {
     try {
